@@ -1,0 +1,28 @@
+name: 구내식당 점심 메뉴 슬랙 알림
+
+on:
+  schedule:
+    # 평일(월~금) 오전 11시 KST = UTC 02:00
+    - cron: "0 2 * * 1-5"
+  workflow_dispatch:  # 수동 실행 버튼
+
+jobs:
+  send-menu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 메뉴 봇 실행
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python menu_bot.py
