@@ -180,7 +180,7 @@ def send_to_slack(message):
             "SLACK_WEBHOOK_URL 환경변수가 설정되지 않았습니다.\n"
             "export SLACK_WEBHOOK_URL='url1,url2'"
         )
-    urls = [u.strip() for u in WEBHOOK_URL.split(",") if u.strip()]
+    urls = [u.strip() for u in WEBHOOK_URL.replace("\n", ",").split(",") if u.strip()]
     for url in urls:
         response = requests.post(url, json=message, timeout=10)
         response.raise_for_status()
