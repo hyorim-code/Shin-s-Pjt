@@ -6,6 +6,7 @@ on:
     - cron: "0 2 * * 1-5"
   workflow_dispatch:  # 수동 실행 버튼
 
+
 jobs:
   send-menu:
     runs-on: ubuntu-latest

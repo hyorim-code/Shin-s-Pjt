@@ -1,0 +1,22 @@
+name: Keep Actions Alive
+
+on:
+  schedule:
+    # 매월 1일 UTC 00:00 (스케줄 비활성화 방지)
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep alive
+        run: echo "keep-alive ping $(date)" >> .github/keep-alive.log
+      - name: Commit keep-alive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/keep-alive.log
+          git diff --staged --quiet || git commit -m "chore: keep actions alive"
+          git push

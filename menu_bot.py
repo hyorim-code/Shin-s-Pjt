@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import datetime
 
+import holidays
 import requests
 from bs4 import BeautifulSoup
 
@@ -187,8 +188,24 @@ def send_to_slack(message):
         print(f"슬랙 전송 완료! ({url[:50]}...)")
 
 
+def is_holiday_or_weekend():
+    """주말 또는 한국 공휴일이면 True"""
+    today = datetime.now().date()
+    if today.weekday() >= 5:  # 토(5), 일(6)
+        return True, f"주말 ({today})"
+    kr_holidays = holidays.KR(years=today.year)
+    if today in kr_holidays:
+        return True, f"공휴일 ({kr_holidays[today]}, {today})"
+    return False, ""
+
+
 def main():
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 메뉴 봇 실행 시작")
+
+    skip, reason = is_holiday_or_weekend()
+    if skip:
+        print(f"오늘은 {reason}이므로 메뉴 발송을 건너뜁니다.")
+        return
 
     try:
         print("메뉴 데이터 수집 중...")
