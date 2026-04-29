@@ -1,0 +1,21 @@
+# 환경 변수
+.env
+.env.*
+
+# Python 캐시
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+
+# Claude Code 로컬 설정
+.claude/settings.local.json
+.claude/launch.json
+
+# Playwright
+.playwright-mcp/
+
+# 기타
+*.log
+.DS_Store
+Thumbs.db
